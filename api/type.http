@@ -1,0 +1,21 @@
+
+### get all pokemons
+GET  http://localhost:3001/types HTTP/1.1
+
+### get pokemon by id
+GET  http://localhost:3001/pokemons/2 HTTP/1.1
+
+### get pokemon by name
+GET  http://localhost:3001/pokemons?name=ivysaur HTTP/1.1
+
+### post pokemon create a new pokemon
+POST  http://localhost:3001/pokemons HTTP/1.1
+# content-type: application/json
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+### get all types
+GET  http://localhost:3001/types HTTP/1.1

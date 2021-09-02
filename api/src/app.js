@@ -10,6 +10,8 @@ const server = express();
 
 server.name = 'API';
 
+
+// ---------- HEADERS ----------------------
 server.use(express.urlencoded({ extended: true, limit: '50mb' }));
 server.use(express.json({ limit: '50mb' }));
 server.use(cookieParser());
@@ -22,9 +24,13 @@ server.use((req, res, next) => {
   next();
 });
 
+
+// ---------- ROUTES ----------------------
+
 server.use('/', routes);
 
-// Error catching endware.
+
+// ---------- ERROR HANDLER ----------------------
 server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   const status = err.status || 500;
   const message = err.message || err;
@@ -32,6 +38,5 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   res.status(status).send(message);
 });
 
-// conn.sync({forse: true})
 
 module.exports = server;

@@ -1,0 +1,34 @@
+POST http://localhost:3001/types HTTP/1.1
+content-type: application/json
+
+{
+    "name": "sample2"
+}
+### 
+GET http://localhost:3001/types HTTP/1.1
+
+### get all pokemons
+GET  http://localhost:3001/pokemons HTTP/1.1
+
+### get pokemon by id
+GET  http://localhost:3001/pokemons/c9fb99b9-2387-4555-ab84-9bcf1d400dd0 HTTP/1.1
+
+### get pokemon by name
+GET  http://localhost:3001/pokemons?name=dra HTTP/1.1
+
+### post pokemon create a new pokemon
+POST  http://localhost:3001/pokemons HTTP/1.1
+content-type: application/json
+
+{
+    "name": "dra",
+    "hp": 23,
+    "attack": 23,
+    "defense": 23,
+    "speed": 34,
+    "height": 34,
+    "weight": 23,
+}
+
+### get all types
+GET  http://localhost:3001/types HTTP/1.1
