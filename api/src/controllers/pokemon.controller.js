@@ -22,55 +22,35 @@ const pokeApi = API + "/pokemon"
 const getPokemons = async () => {
 
   // 1: peticion para tomar todos los pokemones de la DB
-   const { data: { results, next } } = await axios.get(pokeApi)
-   const { data: { results: results2 } } = await axios.get(next)
- 
-   // setting format 
-   // {id, image, name, types}
-   const pokemonsApi = await results.concat(results2)
-   pokemonsApi.forEach(async ({ name, url }) => {
-     const { data: {
-       id,
-       // sprites:{other:{dream_world:{front_default: image}}},
-       // types
-     } } = await axios.get(url)
-     // const type = types.map(({type}) => type.name)
-     return await {
-       id,
-       name,
-       // image,
-       // type
-     }
-   })
+  const { data: { results, next } } = await axios.get(pokeApi)
+  const { data: { results: results2 } } = await axios.get(next)
 
-  console.log(pokemons)
+  // 2: concat 40 pokemons
+  let pokemonsApi = await results.concat(results2)
 
-  // const {results: pokemonArray1 , next: next20pokemons} = responseApi1.data
-  // const responseApi2 = await axios.get(next20pokemons)
-  // console.log(.data)
+  // 3: get image and types from each pokemon
+  pokemonsApi = await Promise.all(
+    pokemonsApi.map(async (data) => {
+      const result = await axios.get(data.url)
+      const {
+        id, name,
+        sprites: { other: { dream_world: { front_default: image } } },
+        types: typeObject
+      } = await result.data
+      const types = typeObject.map(({ type }) => type.name)
+      return { id, name, image, types }
+    })
+  )
+  
+  // 4: get local pokemons
+  const pokemonsLocal = await Pokemon.findAll()
 
-  // const pokemonArray1 = await responseApi.data.results
-  // const pokemons = pokemonArray.map(pokemon => {
-  // axios.get
-  // })
-  // const pokemons = pokemonArray1.concat(responseApi2.results).length
+  // 5: set types to local pokemons
+  
 
+  // 6: concat pokemonsApi y pokemonsLocal
+  const pokemons = [...pokemonsLocal, ...pokemonsApi]
 
-
-  // 2: peticion para obtener los tipos y adiccionar a la estructura de cada pokemon
-  const responseLocal = await Pokemon.findAll()
-
-  // let url = pokeApi
-  //   if (req.params.id) url = `${pokeApi}/${req.params.id}`
-  //   else if (req.query.name) url = `${pokeApi}/${req.query.name}`
-
-  //   axios.get(url)
-  //     .then(result => res.send(result.data))
-  //     .catch(() => res.status(400).send("Error"))
-  // console.log(pokeApi)
-
-  // console.log(pokemons)
-  // const pokemons = await Pokemon.findAll(pokeName).data
   return pokemons || []
 }
 
